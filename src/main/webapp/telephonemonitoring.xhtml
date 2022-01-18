@@ -10,28 +10,9 @@
     </h:head>
     <h:body>
 
-        <p:outputLabel for="input1" value="Cantidad de números telefónicos que se solicitan:"/>
-        <p:inputNumber id="input1" value="#{telephoneMonitoringView.numberPhones}" modifyValueOnWheel="false" />
-
         <h:form>
             <div class="card">
-                <p:dataTable var="product" value="#{dtBasicView.products}">
-                    <p:column headerText="Code">
-                        <h:outputText value="#{product.code}"/>
-                    </p:column>
-
-                    <p:column headerText="Name">
-                        <h:outputText value="#{product.name}"/>
-                    </p:column>
-
-                    <p:column headerText="Category">
-                        <h:outputText value="#{product.category}"/>
-                    </p:column>
-
-                    <p:column headerText="Quantity">
-                        <h:outputText value="#{product.quantity}"/>
-                    </p:column>
-                </p:dataTable>
+                <p:commandButton value="Submit" action="#{telephoneMonitoringView.boton()}"/>
             </div>
         </h:form>
     </h:body>
