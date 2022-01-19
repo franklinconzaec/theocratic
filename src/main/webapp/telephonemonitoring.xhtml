@@ -10,10 +10,21 @@
     </h:head>
     <h:body>
 
-        <h:form>
+        <h:form id="form">
             <div class="card">
-                <p:commandButton value="Submit" action="#{telephoneMonitoringView.boton()}"/>
+                <p:commandButton value="Submit" action="#{telephoneMonitoringView.boton()}" update=":form"/>
             </div>
+                <div class="card">
+                    <p:dataTable var="operator" value="#{telephoneMonitoringView.operators}">
+                        <p:column headerText="Id">
+                            <h:outputText value="#{operator.id}" />
+                        </p:column>
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{operator.name}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
         </h:form>
     </h:body>
 </f:view>

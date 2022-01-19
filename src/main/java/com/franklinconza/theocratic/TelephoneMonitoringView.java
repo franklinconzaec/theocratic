@@ -2,8 +2,6 @@ package com.franklinconza.theocratic;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -26,6 +24,9 @@ public class TelephoneMonitoringView {
     @Getter
     @Setter
     private Integer numberPhones;
+
+    @Getter
+    private ArrayList<OperatorDTO> operators = new ArrayList<>();
 
     //@Autowired
     public TelephoneMonitoringView() {
@@ -42,6 +43,7 @@ public class TelephoneMonitoringView {
         ResponseEntity<List<OperatorDTO>> response = restTemplate.exchange(
                 "http://localhost:8081/operator", HttpMethod.GET, null, new ParameterizedTypeReference<List<OperatorDTO>>() {
                 });
+        operators.addAll(response.getBody());
         System.out.println(response.getBody().get(0).getName());
     }
 
