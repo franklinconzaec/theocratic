@@ -2,8 +2,11 @@ package com.franklinconza.theocratic;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
+import org.apache.catalina.connector.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,18 +14,22 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @ManagedBean
 @ViewScoped
-public class TelephoneMonitoringView implements Serializable {
+public class TelephoneMonitoringView {
+
+    private RestTemplate restTemplate;
 
     @Getter
     @Setter
     private Integer numberPhones;
 
+    //@Autowired
     public TelephoneMonitoringView() {
+        //this.restTemplate = restTemplate;
     }
 
     @PostConstruct
@@ -31,15 +38,18 @@ public class TelephoneMonitoringView implements Serializable {
     }
 
     public void boton() {
-        RestTemplate restTemplate = new RestTemplate();
-        ArrayList<OperatorDTO> quote = restTemplate.getForObject(
-                "http://localhost:8081/operator", OperatorDTO.class);
-        System.out.println(quote.getId() + quote.getName());
+        restTemplate = new RestTemplate();
+        ResponseEntity<List<OperatorDTO>> response = restTemplate.exchange(
+                "http://localhost:8081/operator", HttpMethod.GET, null, new ParameterizedTypeReference<List<OperatorDTO>>() {
+                });
+        System.out.println(response.getBody().get(0).getName());
     }
 
+/*
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }
+*/
 
 }

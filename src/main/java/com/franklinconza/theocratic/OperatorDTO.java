@@ -8,5 +8,4 @@ import lombok.Data;
 public class OperatorDTO {
     private Integer id;
     private String name;
-    //private List<Phone> phones;
 }

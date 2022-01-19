@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Quote {
-    private String type;
-    private ArrayList<OperatorDTO> operatorDTO;
+public class OperatorDTOList {
+    private ArrayList<OperatorDTO> operators;
+
+    public OperatorDTOList(){
+        operators = new ArrayList<>();
+    }
 }
