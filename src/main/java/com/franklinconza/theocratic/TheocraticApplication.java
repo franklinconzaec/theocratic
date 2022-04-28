@@ -18,14 +18,13 @@ public class TheocraticApplication {
 
     @Bean
     ServletRegistrationBean jsfServletRegistration(ServletContext servletContext) {
-        //spring boot only works if this is set
         servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
 
-        //registration
         ServletRegistrationBean srb = new ServletRegistrationBean();
         srb.setServlet(new FacesServlet());
         srb.setUrlMappings(Arrays.asList("*.xhtml"));
         srb.setLoadOnStartup(1);
+
         return srb;
     }
 }

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+    <h:head>
+        <style type="text/css">
+            .cheap {
+                background-color: #54a90a !important;
+                background-image: none !important;
+                color: #ffffff !important;
+            }
+        </style>
+    </h:head>
+    <h:body>
+
+        <h:form id="form_find">
+            <div class="p-col-12 p-md-6 p-lg-4 p-xl-3">
+                <p:outputLabel for="button" value="Fecha "/>
+                <p:datePicker id="button" value="#{telephoneMonitoringView.date}" showIcon="true" pattern="yyyy-MM-dd"/>
+            </div>
+
+            <br/>
+
+            <div class="p-col-12 p-md-6 p-lg-4 p-xl-3">
+                <p:outputLabel for="@next" value="Sección "/>
+                <p:selectOneMenu id="option" value="#{telephoneMonitoringView.section}">
+                    <f:selectItem itemLabel="Seleccione una" itemValue=""/>
+                    <f:selectItems value="#{telephoneMonitoringView.sections}"/>
+                </p:selectOneMenu>
+
+            </div>
+
+            <br/>
+
+            <div class="p-col-12 p-md-6 p-lg-4 p-xl-3">
+                <p:outputLabel value="Conductor "/>
+                <p:selectOneMenu id="labeled" value="#{telephoneMonitoringView.selectedFindConductorId}">
+                    <f:selectItem itemLabel="Seleccione uno" itemValue=""/>
+                    <f:selectItems value="#{telephoneMonitoringView.conductors}" var="conductor"
+                                   itemLabel="#{conductor.name}" itemValue="#{conductor.id}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <br/>
+
+            <div class="p-col-12 p-md-6 p-lg-4 p-xl-3">
+                <p:commandButton value="Buscar" action="#{telephoneMonitoringView.find()}" update=":form_table"/>
+            </div>
+        </h:form>
+
+        <br/>
+
+        <h:form id="form_table">
+            <div class="card">
+                <p:growl id="messages" showDetail="true"/>
+                <p:dataTable id="dt-calls" var="call" value="#{telephoneMonitoringView.calls}"
+                             size="small"
+                             stickyHeader="true" stickyTopAt=".layout-topbar"
+                             showGridlines="true"
+                             rowStyleClass="#{call.state == null ? 'cheap' : null}">
+
+                    <f:facet name="header">
+                        Total de números telefónicos: #{fn:length(telephoneMonitoringView.calls)}
+                    </f:facet>
+
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{call.date}">
+                            <f:convertDateTime pattern="yyyy-MM-dd" type="localDate"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Jornada">
+                        <h:outputText value="#{call.section}"/>
+                    </p:column>
+
+                    <p:column headerText="Conductor">
+                        <h:outputText value="#{call.conductor}"/>
+                    </p:column>
+
+                    <p:column headerText="Teléfono">
+                        <h:outputText value="#{call.phone}"/>
+                    </p:column>
+
+                    <p:column headerText="Propietario">
+                        <h:outputText value="#{call.owner}"/>
+                    </p:column>
+
+                    <p:column headerText="Publicador">
+                        <h:outputText value="#{call.publisher}"/>
+                    </p:column>
+
+                    <p:column headerText="Estado">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{call.state}"/></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{call.state}" style="width:100%">
+                                    <f:selectItem itemLabel="Seleccione un estado" itemValue=""/>
+                                    <f:selectItems value="#{telephoneMonitoringView.states}" var="state"
+                                                   itemLabel="#{state}" itemValue="#{state}"/>
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Observaciones">
+                        <h:outputText value="#{call.observation}"/>
+                    </p:column>
+
+                    <p:column exportable="false">
+                        <p:commandButton icon="pi pi-pencil" update=":form_table, :form_table:manage-call-content"
+                                         oncomplete="PF('manageCallDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{call}"
+                                                         target="#{telephoneMonitoringView.selectedCall}"/>
+                            <p:resetInput target=":form_table:manage-call-content"/>
+                        </p:commandButton>
+
+                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
+                                         oncomplete="PF('deleteCallDialog').show()">
+                            <f:setPropertyActionListener value="#{call}"
+                                                         target="#{telephoneMonitoringView.selectedCall}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:dialog header="Detalle de llamada" showEffect="fade" modal="true"
+                          widgetVar="manageCallDialog" responsive="true">
+                    <p:outputPanel id="manage-call-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty telephoneMonitoringView.selectedCall}">
+                            <div class="p-field">
+                                <p:outputLabel for="date">Fecha</p:outputLabel>
+                                <p:inputText id="date" value="#{telephoneMonitoringView.selectedCall.date}"
+                                             disabled="true">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" type="localDate"/>
+                                </p:inputText>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="section">Jornada</p:outputLabel>
+                                <p:selectOneMenu id="section" value="#{telephoneMonitoringView.selectedCall.section}"
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="Seleccione una" itemValue=""/>
+                                    <f:selectItems value="#{telephoneMonitoringView.sections}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="conductor">Conductor</p:outputLabel>
+                                <p:selectOneMenu id="conductor"
+                                                 value="#{telephoneMonitoringView.selectedCall.conductorId}"
+                                                 required="true">
+                                    <f:selectItem itemLabel="Seleccione uno" itemValue=""/>
+                                    <f:selectItems value="#{telephoneMonitoringView.conductors}" var="conductor"
+                                                   itemLabel="#{conductor.name}" itemValue="#{conductor.id}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="phone">Teléfono</p:outputLabel>
+                                <p:inputTextarea id="phone" value="#{telephoneMonitoringView.selectedCall.phone}"
+                                                 disabled="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="owner">Propietario</p:outputLabel>
+                                <p:inputTextarea id="owner" value="#{telephoneMonitoringView.selectedCall.owner}"
+                                                 disabled="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="publisher">Publicador</p:outputLabel>
+                                <p:selectOneMenu id="publisher"
+                                                 value="#{telephoneMonitoringView.selectedCall.publisherId}"
+                                                 required="true">
+                                    <f:selectItem itemLabel="Seleccione uno" itemValue=""/>
+                                    <f:selectItems value="#{telephoneMonitoringView.publishers}" var="publisher"
+                                                   itemLabel="#{publisher.name}" itemValue="#{publisher.id}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="state">Estado</p:outputLabel>
+                                <p:selectOneMenu id="state" value="#{telephoneMonitoringView.selectedCall.stateId}"
+                                                 required="true">
+                                    <f:selectItem itemLabel="Seleccione uno" itemValue=""/>
+                                    <f:selectItems value="#{telephoneMonitoringView.states}" var="state"
+                                                   itemLabel="#{state.name}" itemValue="#{state.id}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="observation">Observaciones</p:outputLabel>
+                                <p:inputTextarea id="observation"
+                                                 value="#{telephoneMonitoringView.selectedCall.observation}"/>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{telephoneMonitoringView.updateCall}"
+                                         update=":form_table, manage-call-content" process="manage-call-content @this"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCallDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:confirmDialog widgetVar="deleteCallDialog" showEffect="fade" width="300"
+                                 message="Borrar la llamada?" header="Confirme" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check"
+                                     actionListener="#{telephoneMonitoringView.deleteCall}"
+                                     process="@this" oncomplete="PF('deleteCallDialog').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteCallDialog').hide()"/>
+                </p:confirmDialog>
+
+            </div>
+        </h:form>
+
+    </h:body>
+</f:view>
+
+</html>
