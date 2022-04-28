@@ -1,1 +1,1 @@
-# theocratic-frontend-java
+# theocratic-java
