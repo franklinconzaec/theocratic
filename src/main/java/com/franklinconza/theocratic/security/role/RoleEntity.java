@@ -1,4 +1,4 @@
-package com.franklinconza.theocratic.security.models;
+package com.franklinconza.theocratic.security.role;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(schema = "security", name = "roles")
-public class RoleModel {
+public class RoleEntity {
     @Id
     @Column(name = "role_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,8 @@
 package com.franklinconza.theocratic.ministry.state;
 
-import com.franklinconza.theocratic.models.StateModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface StateRepository extends JpaRepository<StateModel, Integer> {
+@Repository
+public interface StateRepository extends JpaRepository<StateEntity, Integer> {
 }

@@ -1,4 +1,4 @@
-package com.franklinconza.theocratic.security.models;
+package com.franklinconza.theocratic.security.user;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(schema = "security", name = "users")
-public class UserModel {
+public class UserEntity {
     @Id
     @Column(name = "user_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

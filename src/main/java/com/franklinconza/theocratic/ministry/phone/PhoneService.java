@@ -1,54 +1,38 @@
 package com.franklinconza.theocratic.ministry.phone;
 
-import com.franklinconza.theocratic.ministry.phone.PhoneDto;
-import com.franklinconza.theocratic.models.PhoneModel;
-import com.franklinconza.theocratic.models.PhoneModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.franklinconza.theocratic.utils.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PhoneService {
 
-    private PhoneRepository phoneRepository;
-    private PhoneMapper phoneMapper;
+    private final PhoneRepository phoneRepository;
+    private final Mapper mapper;
 
-    @Autowired
-    public PhoneService(PhoneRepository phoneRepository, PhoneMapper phoneMapper) {
-        this.phoneRepository = phoneRepository;
-        this.phoneMapper = phoneMapper;
-    }
-
-    public ArrayList<PhoneDto> findAll() {
-        List<PhoneModel> phonesModel = phoneRepository.findAll();
-        ArrayList<PhoneDto> phonesDto = (ArrayList<PhoneDto>) phonesModel.stream().map(phoneMapper::convertToDto).collect(Collectors.toList());
-        return phonesDto;
-
+    public List<PhoneDto> findAll() {
+        List<PhoneEntity> phonesModel = phoneRepository.findAll();
+        return mapper.mapList(phonesModel, PhoneDto.class);
     }
 
     public PhoneDto findById(Integer id) {
-        PhoneModel phoneModel = phoneRepository.findById(id).get();
-        PhoneDto phoneDTO = phoneMapper.convertToDto(phoneModel);
-        return phoneDTO;
+        PhoneEntity phoneEntity = phoneRepository.findById(id).get();
+        return mapper.map(phoneEntity, PhoneDto.class);
     }
 
     public PhoneDto save(PhoneDto phoneDTO) {
-        PhoneModel phoneModel = phoneMapper.convertToModel(phoneDTO);
-        phoneModel = phoneRepository.save(phoneModel);
-        phoneDTO = phoneMapper.convertToDto(phoneModel);
-
-        return phoneDTO;
+        PhoneEntity phoneEntity = mapper.map(phoneDTO, PhoneEntity.class);
+        phoneRepository.save(phoneEntity);
+        return mapper.map(phoneEntity, PhoneDto.class);
     }
 
     public PhoneDto update(PhoneDto phoneDTO) {
-        PhoneModel phoneModel = phoneMapper.convertToModel(phoneDTO);
-        phoneModel = phoneRepository.save(phoneModel);
-        phoneDTO = phoneMapper.convertToDto(phoneModel);
-
-        return phoneDTO;
+        PhoneEntity phoneEntity = mapper.map(phoneDTO, PhoneEntity.class);
+        phoneRepository.save(phoneEntity);
+        return mapper.map(phoneEntity, PhoneDto.class);
     }
 
     public void delete(Integer id) {

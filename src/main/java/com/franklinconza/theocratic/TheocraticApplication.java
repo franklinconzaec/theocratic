@@ -27,4 +27,9 @@ public class TheocraticApplication {
 
         return srb;
     }
+
+//    @Bean
+//    public ModelMapper modelMapper() {
+//        return new ModelMapper();
+//    }
 }

@@ -1,14 +1,11 @@
-package com.franklinconza.theocratic;
+package com.franklinconza.theocratic.ministry.call;
 
 import lombok.Data;
 
-import java.util.Date;
-import java.util.UUID;
-
 @Data
-public class CallUpdateDto {
+public class CallUpdateRequest {
 
-    private UUID id;
+    private String id;
     private int conductorId;
     private int publisherId;
     private int stateId;

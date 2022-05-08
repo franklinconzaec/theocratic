@@ -1,9 +1,14 @@
 package com.franklinconza.theocratic.ministry.state;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class StateDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class StateFindResponse {
+
     private Integer id;
     private String name;
     private String description;

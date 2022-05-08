@@ -1,7 +1,8 @@
 package com.franklinconza.theocratic.ministry.operator;
 
-import com.franklinconza.theocratic.models.OperatorModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface OperatorRepository extends JpaRepository<OperatorModel, Integer> {
+@Repository
+public interface OperatorRepository extends JpaRepository<OperatorEntity, Integer> {
 }

@@ -1,4 +1,4 @@
-package com.franklinconza.theocratic.models;
+package com.franklinconza.theocratic.ministry.phone;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(schema = "ministry", name = "phones")
-public class PhoneModel {
+public class PhoneEntity {
     @Id
     @Column(name = "phone_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,6 @@ public class PhoneModel {
 
     private Boolean occupied;
 
-    @ManyToOne
-    @JoinColumn(name = "operator_id", nullable = false)
-    private OperatorModel operator;
+    @Column(name = "operator_id", nullable = false)
+    private String operator;
 }

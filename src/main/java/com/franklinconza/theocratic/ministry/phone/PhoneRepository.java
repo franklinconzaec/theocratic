@@ -1,7 +1,8 @@
 package com.franklinconza.theocratic.ministry.phone;
 
-import com.franklinconza.theocratic.models.PhoneModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface PhoneRepository extends JpaRepository<PhoneModel, Integer> {
+@Repository
+public interface PhoneRepository extends JpaRepository<PhoneEntity, Integer> {
 }

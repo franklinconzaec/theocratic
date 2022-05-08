@@ -1,4 +1,4 @@
-package com.franklinconza.theocratic.models;
+package com.franklinconza.theocratic.ministry.state;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(schema = "ministry", name = "states")
-public class StateModel {
+public class StateEntity {
     @Id
     @Column(name = "state_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
